@@ -1,0 +1,14 @@
+function DocumentTab({ doc, isFocused, onClose }) {
+  return (
+    <div className={`document-tab ${isFocused ? 'tab-active' : ''}`}>
+      <span className="tab-name" title={doc.name}>
+        {doc.name}
+      </span>
+      <button className="tab-close-btn" onClick={onClose} title="Close document">
+        ×
+      </button>
+    </div>
+  )
+}
+
+export default DocumentTab

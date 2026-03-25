@@ -1,0 +1,48 @@
+import { useState } from 'react'
+
+function SearchReplaceModal({ onReplace, onClose }) {
+  const [searchStr, setSearchStr] = useState('')
+  const [replaceStr, setReplaceStr] = useState('')
+  const [feedback, setFeedback] = useState('')
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    // TODO: Partner needs to implement Local Storage logic using JSON.stringify/parse.
+  }
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal" onClick={e => e.stopPropagation()}>
+        <h3>Search &amp; Replace</h3>
+        <form onSubmit={handleSubmit}>
+          <label>
+            Find:
+            <input
+              type="text"
+              value={searchStr}
+              onChange={e => { setSearchStr(e.target.value); setFeedback('') }}
+              placeholder="Text to find…"
+              autoFocus
+            />
+          </label>
+          <label>
+            Replace with:
+            <input
+              type="text"
+              value={replaceStr}
+              onChange={e => setReplaceStr(e.target.value)}
+              placeholder="Replacement (leave empty to delete)"
+            />
+          </label>
+          {feedback && <p className="modal-feedback">{feedback}</p>}
+          <div className="modal-actions">
+            <button type="submit" disabled={!searchStr}>Replace</button>
+            <button type="button" className="btn-secondary" onClick={onClose}>Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+export default SearchReplaceModal

@@ -49,9 +49,11 @@ function Toolbar({
       <div className="tb-group">
         <span className="tb-label">Lang</span>
         {[
-          { key: 'english', label: 'EN' },
-          { key: 'hebrew', label: 'עב' },
+          { key: 'english', label: 'english' },
+          { key: 'hebrew', label: 'עברית' },
           { key: 'emojis', label: '😊' },
+          { key:'numbers', label:'1 2 3'},
+          { key:'kaomoji', label:'｡♥‿♥｡'}
         ].map(({ key, label }) => (
           <button
             key={key}

@@ -14,7 +14,7 @@ function LoginScreen({ onLogin }) {
     const users = JSON.parse(localStorage.getItem('vte__users') || '{}')
 
     if (users[trimmed] === undefined) {
-      // New user — register
+      //register
       users[trimmed] = password
       localStorage.setItem('vte__users', JSON.stringify(users))
       onLogin(trimmed)

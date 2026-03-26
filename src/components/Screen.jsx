@@ -23,7 +23,7 @@ function Screen({ chars }) {
               fontFamily: charObj.fontFamily,
             }}
           >
-            {/* Use a non-breaking space so spaces are visible in the browser. */}
+            {/* Use a nonbreaking space so spaces are visible in the browser. */}
             {charObj.char === ' ' ? '\u00A0' : charObj.char}
           </span>
         )

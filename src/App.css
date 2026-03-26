@@ -1,6 +1,4 @@
-/* ─────────────────────────────────────────
-   Design tokens
-   ───────────────────────────────────────── */
+/* Design tokens */
 :root {
   --app-bg:       #1a1a2e;
   --panel-bg:     #16213e;
@@ -26,9 +24,7 @@
   --radius:       6px;
 }
 
-/* ─────────────────────────────────────────
-   App shell
-   ───────────────────────────────────────── */
+/* App shell*/
 .app {
   display: flex;
   flex-direction: column;
@@ -36,9 +32,7 @@
   background: var(--app-bg);
 }
 
-/* ─────────────────────────────────────────
-   Documents area  (Phase C grid)
-   ───────────────────────────────────────── */
+/* documents area  (Phase C grid)*/
 .documents-area {
   flex: 1;
   display: grid;
@@ -59,9 +53,7 @@
   font-size: 16px;
 }
 
-/* ─────────────────────────────────────────
-   Document wrapper
-   ───────────────────────────────────────── */
+/* Document wrapper*/
 .document-wrapper {
   display: flex;
   flex-direction: column;
@@ -78,9 +70,7 @@
   box-shadow: 0 0 14px rgba(0, 180, 216, 0.35);
 }
 
-/* ─────────────────────────────────────────
-   Document tab
-   ───────────────────────────────────────── */
+/*Document tab*/
 .document-tab {
   display: flex;
   align-items: center;
@@ -124,9 +114,7 @@
   color: var(--danger);
 }
 
-/* ─────────────────────────────────────────
-   Screen (character display)
-   ───────────────────────────────────────── */
+/* Screen (character display)*/
 .screen {
   flex: 1;
   padding: 12px 14px;
@@ -144,18 +132,14 @@
   font-size: 14px;
 }
 
-/* ─────────────────────────────────────────
-   Bottom panel
-   ───────────────────────────────────────── */
+/* Bottom panel*/
 .bottom-panel {
   flex-shrink: 0;
   background: var(--panel-bg);
   border-top: 2px solid var(--accent);
 }
 
-/* ─────────────────────────────────────────
-   Toolbar
-   ───────────────────────────────────────── */
+/*Toolbar*/
 .toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -276,9 +260,7 @@
   white-space: nowrap;
 }
 
-/* ─────────────────────────────────────────
-   Keyboard
-   ───────────────────────────────────────── */
+/* Keyboard*/
 .keyboard {
   display: flex;
   flex-direction: column;
@@ -352,9 +334,7 @@
   background: #a02424;
 }
 
-/* ─────────────────────────────────────────
-   Modals
-   ───────────────────────────────────────── */
+/* Modals*/
 .modal-overlay {
   position: fixed;
   inset: 0;

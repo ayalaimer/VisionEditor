@@ -11,40 +11,41 @@ import './App.css'
 
 let nextDocId = 1
 
-// Creates a new document object with a unique ID, empty content, and empty undo history.
+// creates a new document 
 function createDoc(name, owner) {
   return { id: nextDocId++, name, owner, chars: [], history: [] }
 }
 
-// Root component that manages all application state and orchestrates child components.
+// root component that manages all application state and orchestrates child components.
 function App() {
-  // Stores the currently logged-in username, or null when no user is active.
+  //current user
   const [currentUser, setCurrentUser] = useState(null)
 
-  // List of all currently open document objects.
+  // list of all currently open document objects.
   const [documents, setDocuments] = useState([])
-  // ID of the document the user is currently working on.
+
+  // id of the document the user is currently working on.
   const [focusedDocId, setFocusedDocId] = useState(null)
 
-  // Current typing style (color, font size, font family) applied to new characters.
+  // current typing style
   const [activeStyle, setActiveStyle] = useState({
     color: '#000000',
     fontSize: '20px',
     fontFamily: 'Arial',
   })
-  // Currently selected keyboard language layout.
+  // currently selected keyboard language layout.
   const [language, setLanguage] = useState('english')
 
-  // Controls which modal overlay is currently visible.
+  // controls which window is currently visible.
   const [showSearchReplace, setShowSearchReplace] = useState(false)
   const [showSaveAs, setShowSaveAs] = useState(false)
   const [showOpen, setShowOpen] = useState(false)
   const [closePromptDocId, setClosePromptDocId] = useState(null)
 
-  // Derived reference to the currently focused document object.
+  // derived reference to the currently focused document object.
   const focusedDoc = documents.find(d => d.id === focusedDocId) || null
 
-  // Logs in the user and opens a blank starting document.
+  // logs in the user and opens a blank starting document.
   function handleLogin(username) {
     setCurrentUser(username)
     const doc = createDoc('Untitled', username)
@@ -52,19 +53,19 @@ function App() {
     setFocusedDocId(doc.id)
   }
 
-  // Clears the current session and resets all application state.
+  // clears the current session and resets all application state.
   function handleLogout() {
     setCurrentUser(null)
     setDocuments([])
     setFocusedDocId(null)
   }
 
-  // Applies an updater function to a single document, leaving all others unchanged.
+  // applies an updater function to a single document, leaving all others unchanged.
   function updateDoc(docId, updater) {
     setDocuments(prev => prev.map(d => (d.id === docId ? updater(d) : d)))
   }
 
-  // Pushes the current character array onto the undo history, capped at 50 entries.
+  // pushes the current character array onto the undo history, capped at 50 entries.
   function saveSnapshot(doc) {
     const history = doc.history.length >= 50
       ? [...doc.history.slice(1), doc.chars]
@@ -148,7 +149,7 @@ function App() {
   function saveDoc() {
   }
 
-  // Handles saving the document under a new user-provided filename.
+  // handles saving the document under a new user-provided filename.
   function handleSaveAs(filename) {
   }
 
@@ -157,7 +158,7 @@ function App() {
     return []
   }
 
-  // Opens a saved file by loading its stored content into a new document tab.
+  // opens a saved file by loading its stored content into a new document tab.
   function openFile(filename, chars) {
   }
 
@@ -173,7 +174,7 @@ function App() {
     setClosePromptDocId(docId)
   }
 
-  // Closes a document, optionally saving it to Local Storage first.
+  // closes a document, optionally saving it to Local Storage first.
   function closeDoc(docId, shouldSave) {
     if (shouldSave) {
       const doc = documents.find(d => d.id === docId)
@@ -220,7 +221,7 @@ function App() {
         )}
       </div>
 
-      {/* Toolbar and virtual keyboard, fixed at the bottom of the screen. */}
+      {/* toolbar and virtual keyboard, fixed at the bottom of the screen. */}
       <div className="bottom-panel">
         <Toolbar
           language={language}

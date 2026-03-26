@@ -17,6 +17,7 @@ const COLOR_PRESETS = [
   '#ec4899', '#06b6d4',
 ]
 
+// Renders the top control bar with file, language, style, and edit actions.
 function Toolbar({
   language, setLanguage,
   activeStyle, setActiveStyle,
@@ -27,6 +28,7 @@ function Toolbar({
   hasDoc,
   canUndo,
 }) {
+  // Updates the active style by merging a new key-value pair into the current style object.
   function updateStyle(key, value) {
     setActiveStyle(prev => ({ ...prev, [key]: value }))
   }

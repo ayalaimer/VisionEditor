@@ -1,3 +1,4 @@
+// Renders each character in the document with its individual color, size, and font style.
 function Screen({ chars }) {
   if (chars.length === 0) {
     return (
@@ -22,6 +23,7 @@ function Screen({ chars }) {
               fontFamily: charObj.fontFamily,
             }}
           >
+            {/* Use a non-breaking space so spaces are visible in the browser. */}
             {charObj.char === ' ' ? '\u00A0' : charObj.char}
           </span>
         )

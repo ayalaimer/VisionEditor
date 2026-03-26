@@ -1,10 +1,12 @@
 import { useState } from 'react'
 
+// Modal dialog for finding and replacing text in the current document.
 function SearchReplaceModal({ onReplace, onClose }) {
   const [searchStr, setSearchStr] = useState('')
   const [replaceStr, setReplaceStr] = useState('')
   const [feedback, setFeedback] = useState('')
 
+  // Triggers the search and replace operation when the form is submitted.
   function handleSubmit(e) {
     e.preventDefault()
     // TODO: Partner needs to implement Local Storage logic using JSON.stringify/parse.

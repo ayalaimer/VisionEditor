@@ -1,3 +1,4 @@
+// Modal dialog that lists all saved files for the current user and allows opening one.
 function OpenModal({ files, onOpen, onClose }) {
   return (
     <div className="modal-overlay" onClick={onClose}>

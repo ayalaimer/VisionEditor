@@ -1,3 +1,4 @@
+// Displays the tab header for a document, showing its name and a close button.
 function DocumentTab({ doc, isFocused, onClose }) {
   return (
     <div className={`document-tab ${isFocused ? 'tab-active' : ''}`}>

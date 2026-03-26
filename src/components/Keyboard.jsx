@@ -1,3 +1,4 @@
+// Virtual keyboard component that renders character buttons for the selected language.
 function Keyboard({ language, onKeyPress, onDeleteChar, disabled }) {
   return (
     <div className={`keyboard ${disabled ? 'keyboard-disabled' : ''}`}>

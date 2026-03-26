@@ -1,9 +1,11 @@
 import { useState } from 'react'
 
+// Displays the login form and handles both new user registration and returning user authentication.
 function LoginScreen({ onLogin }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
+  // Validates credentials against Local Storage, registering new users or logging in existing ones.
   function handleSubmit(e) {
     e.preventDefault()
     const trimmed = username.trim()

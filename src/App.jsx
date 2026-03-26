@@ -11,35 +11,40 @@ import './App.css'
 
 let nextDocId = 1
 
+// Creates a new document object with a unique ID, empty content, and empty undo history.
 function createDoc(name, owner) {
   return { id: nextDocId++, name, owner, chars: [], history: [] }
 }
 
+// Root component that manages all application state and orchestrates child components.
 function App() {
-  // Phase D: user identity
+  // Stores the currently logged-in username, or null when no user is active.
   const [currentUser, setCurrentUser] = useState(null)
 
-  // Phase C: multiple documents
+  // List of all currently open document objects.
   const [documents, setDocuments] = useState([])
+  // ID of the document the user is currently working on.
   const [focusedDocId, setFocusedDocId] = useState(null)
 
-  // Phase A: active typing style
+  // Current typing style (color, font size, font family) applied to new characters.
   const [activeStyle, setActiveStyle] = useState({
     color: '#000000',
     fontSize: '20px',
     fontFamily: 'Arial',
   })
+  // Currently selected keyboard language layout.
   const [language, setLanguage] = useState('english')
 
-  // Modal visibility flags
+  // Controls which modal overlay is currently visible.
   const [showSearchReplace, setShowSearchReplace] = useState(false)
   const [showSaveAs, setShowSaveAs] = useState(false)
   const [showOpen, setShowOpen] = useState(false)
   const [closePromptDocId, setClosePromptDocId] = useState(null)
 
+  // Derived reference to the currently focused document object.
   const focusedDoc = documents.find(d => d.id === focusedDocId) || null
 
-  // ── Phase D ──────────────────────────────────────────────────────────────
+  // Logs in the user and opens a blank starting document.
   function handleLogin(username) {
     setCurrentUser(username)
     const doc = createDoc('Untitled', username)
@@ -47,26 +52,27 @@ function App() {
     setFocusedDocId(doc.id)
   }
 
+  // Clears the current session and resets all application state.
   function handleLogout() {
     setCurrentUser(null)
     setDocuments([])
     setFocusedDocId(null)
   }
 
-  // ── Helpers ──────────────────────────────────────────────────────────────
+  // Applies an updater function to a single document, leaving all others unchanged.
   function updateDoc(docId, updater) {
     setDocuments(prev => prev.map(d => (d.id === docId ? updater(d) : d)))
   }
 
+  // Pushes the current character array onto the undo history, capped at 50 entries.
   function saveSnapshot(doc) {
-    // Keep up to 50 undo states to prevent memory bloat
     const history = doc.history.length >= 50
       ? [...doc.history.slice(1), doc.chars]
       : [...doc.history, doc.chars]
     return history
   }
 
-  // ── Phase A: text editing ─────────────────────────────────────────────
+  // Adds a new character object (with the current style) to the focused document.
   function addChar(char) {
     if (!focusedDoc) return
     const newChar = { char, ...activeStyle }
@@ -77,6 +83,7 @@ function App() {
     }))
   }
 
+  // Removes the last character from the focused document.
   function deleteChar() {
     if (!focusedDoc || focusedDoc.chars.length === 0) return
     updateDoc(focusedDocId, d => ({
@@ -86,6 +93,7 @@ function App() {
     }))
   }
 
+  // Removes the last word from the document, skipping any trailing spaces or newlines.
   function deleteWord() {
     if (!focusedDoc) return
     updateDoc(focusedDocId, d => {
@@ -99,11 +107,13 @@ function App() {
     })
   }
 
+  // Clears all characters from the focused document.
   function clearAll() {
     if (!focusedDoc) return
     updateDoc(focusedDocId, d => ({ ...d, history: saveSnapshot(d), chars: [] }))
   }
 
+  // Restores the previous character state from the undo history.
   function undo() {
     if (!focusedDoc || focusedDoc.history.length === 0) return
     updateDoc(focusedDocId, d => ({
@@ -113,6 +123,7 @@ function App() {
     }))
   }
 
+  // Finds the first occurrence of a search string and replaces it with another.
   function searchReplace(searchStr, replaceStr) {
     if (!focusedDoc || !searchStr) return
     const chars = focusedDoc.chars
@@ -129,39 +140,40 @@ function App() {
     }))
   }
 
-  // ── Phase B: persistence ──────────────────────────────────────────────
+  // Persists the document to Local Storage under a user-specific key.
   function doSave(filename, doc) {
-    // TODO: Partner needs to implement Local Storage logic using JSON.stringify/parse.
   }
 
+  // Saves the focused document, prompting for a filename if it is still "Untitled".
   function saveDoc() {
-    // TODO: Partner needs to implement Local Storage logic using JSON.stringify/parse.
   }
 
+  // Handles saving the document under a new user-provided filename.
   function handleSaveAs(filename) {
-    // TODO: Partner needs to implement Local Storage logic using JSON.stringify/parse.
   }
 
+  // Loads and returns all saved files belonging to the current user from Local Storage.
   function getSavedFiles() {
-    // TODO: Partner needs to implement Local Storage logic using JSON.stringify/parse.
     return []
   }
 
+  // Opens a saved file by loading its stored content into a new document tab.
   function openFile(filename, chars) {
-    // TODO: Partner needs to implement Local Storage logic using JSON.stringify/parse.
   }
 
-  // ── Phase C: multi-document ───────────────────────────────────────────
+  // Creates and opens a new blank document.
   function newDocument() {
     const doc = createDoc('Untitled', currentUser)
     setDocuments(prev => [...prev, doc])
     setFocusedDocId(doc.id)
   }
 
+  // Triggers the close confirmation prompt for a given document.
   function requestCloseDoc(docId) {
     setClosePromptDocId(docId)
   }
 
+  // Closes a document, optionally saving it to Local Storage first.
   function closeDoc(docId, shouldSave) {
     if (shouldSave) {
       const doc = documents.find(d => d.id === docId)
@@ -175,7 +187,7 @@ function App() {
     setClosePromptDocId(null)
   }
 
-  // ── Render ────────────────────────────────────────────────────────────
+  // Shows the login screen when no user is logged in.
   if (!currentUser) {
     return <LoginScreen onLogin={handleLogin} />
   }
@@ -184,7 +196,7 @@ function App() {
 
   return (
     <div className="app">
-      {/* ── Documents area (Phase C) ── */}
+      {/* Renders all open documents as tiled panels. */}
       <div className="documents-area">
         {documents.length === 0 ? (
           <div className="empty-state">
@@ -208,7 +220,7 @@ function App() {
         )}
       </div>
 
-      {/* ── Bottom panel: Toolbar + Keyboard ── */}
+      {/* Toolbar and virtual keyboard, fixed at the bottom of the screen. */}
       <div className="bottom-panel">
         <Toolbar
           language={language}
@@ -237,7 +249,7 @@ function App() {
         />
       </div>
 
-      {/* ── Modals ── */}
+      {/* Overlay modals shown based on current UI state. */}
       {showSearchReplace && (
         <SearchReplaceModal
           onReplace={searchReplace}

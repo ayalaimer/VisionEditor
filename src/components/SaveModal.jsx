@@ -1,8 +1,10 @@
 import { useState } from 'react'
 
+// Modal dialog for saving a document under a user-specified filename.
 function SaveModal({ currentName, onSave, onClose }) {
   const [filename, setFilename] = useState(currentName || '')
 
+  // Validates the filename and triggers the save callback on form submission.
   function handleSubmit(e) {
     e.preventDefault()
     const name = filename.trim()

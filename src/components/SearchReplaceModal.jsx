@@ -9,8 +9,8 @@ function SearchReplaceModal({ onReplace, onClose }) {
   // Triggers the search and replace operation when the form is submitted.
   function handleSubmit(e) {
     e.preventDefault()
-    // TODO: Partner needs to implement Local Storage logic using JSON.stringify/parse.
-  }
+  onReplace(searchStr, replaceStr) 
+ }
 
   return (
     <div className="modal-overlay" onClick={onClose}>

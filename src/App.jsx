@@ -73,7 +73,7 @@ function App() {
     return history
   }
 
-  // Adds a new character object (with the current style) to the focused document.
+  // adds a new character object (with the current style) to the focused document.
   function addChar(char) {
     if (!focusedDoc) return
     const newChar = { char, ...activeStyle }
@@ -84,7 +84,7 @@ function App() {
     }))
   }
 
-  // Removes the last character from the focused document.
+  // removes the last character from the focused document.
   function deleteChar() {
     if (!focusedDoc || focusedDoc.chars.length === 0) return
     updateDoc(focusedDocId, d => ({
@@ -94,7 +94,7 @@ function App() {
     }))
   }
 
-  // Removes the last word from the document, skipping any trailing spaces or newlines.
+  // removes the last word from the document, skipping any trailing spaces or newlines.
   function deleteWord() {
     if (!focusedDoc) return
     updateDoc(focusedDocId, d => {
@@ -108,13 +108,13 @@ function App() {
     })
   }
 
-  // Clears all characters from the focused document.
+  // clears all characters from the focused document.
   function clearAll() {
     if (!focusedDoc) return
     updateDoc(focusedDocId, d => ({ ...d, history: saveSnapshot(d), chars: [] }))
   }
 
-  // Restores the previous character state from the undo history.
+  // restores the previous character state from the undo history.
   function undo() {
     if (!focusedDoc || focusedDoc.history.length === 0) return
     updateDoc(focusedDocId, d => ({
@@ -124,7 +124,7 @@ function App() {
     }))
   }
 
-  // Finds the first occurrence of a search string and replaces it with another.
+  // finds the first occurrence of a search string and replaces it with another.
   function searchReplace(searchStr, replaceStr) {
     if (!focusedDoc || !searchStr) return
     const chars = focusedDoc.chars
@@ -141,35 +141,69 @@ function App() {
     }))
   }
 
-  // Persists the document to Local Storage under a user-specific key.
+  // persists the document to Local storage
   function doSave(filename, doc) {
+    const key =`${currentUser}`
+    const exi=JSON.parse(localStorage.getItem(key)||`{}`)
+    exi[filename]=doc
+    localStorage.setItem(key,JSON.stringify(exi))
+
   }
 
-  // Saves the focused document, prompting for a filename if it is still "Untitled".
+  // saves the focused document if it is still Untitled ask filename.
   function saveDoc() {
+    if (!focusedDoc) return;
+    if(focusedDoc?.name=="Untitled"){
+      setShowSaveAs(true);
+    }
+    else {
+      doSave(focusedDoc.name, focusedDoc);
+    }
   }
 
-  // handles saving the document under a new user-provided filename.
+  // handles saving the document under a new filename.
   function handleSaveAs(filename) {
+    if (!focusedDoc) return
+
+    updateDoc(focusedDocId, d => ({
+      ...d,
+     name: filename,
+    }))
+
+    doSave(filename, {
+    ...focusedDoc,
+     name: filename,
+   })
+
+    setShowSaveAs(false)
   }
 
-  // Loads and returns all saved files belonging to the current user from Local Storage.
-  function getSavedFiles() {
-    return []
-  }
+// loads and returns all saved files belonging to the current user from Local Storage.
+function getSavedFiles() {
+    const exi=JSON.parse(localStorage.getItem(currentUser)||`{}`);
+     return Object.entries(exi).map(([filename, doc]) => ({
+      name: filename,
+      chars: doc.chars
+    }));
+}
 
   // opens a saved file by loading its stored content into a new document tab.
   function openFile(filename, chars) {
+      const doc = createDoc(filename, currentUser);
+      doc.chars = chars;
+      setDocuments(prev=>[...prev,doc])
+      setFocusedDocId(doc.id);
+      setShowOpen(false);//close the window of choose file
   }
 
-  // Creates and opens a new blank document.
+  // creates and opens a new blank document.
   function newDocument() {
     const doc = createDoc('Untitled', currentUser)
     setDocuments(prev => [...prev, doc])
     setFocusedDocId(doc.id)
   }
 
-  // Triggers the close confirmation prompt for a given document.
+  // triggers the close confirmation prompt for a given document.
   function requestCloseDoc(docId) {
     setClosePromptDocId(docId)
   }

@@ -28,7 +28,7 @@ function LoginScreen({ onLogin }) {
   return (
     <div className="login-screen">
       <div className="login-box">
-        <div className="login-logo">✏️</div>
+        <div className="login-logo">✍</div>
         <h1>Visual Text Editor</h1>
         <p>Enter your name to start editing</p>
         <form onSubmit={handleSubmit}>

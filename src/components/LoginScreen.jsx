@@ -14,7 +14,7 @@ function LoginScreen({ onLogin }) {
     const users = JSON.parse(localStorage.getItem('vte__users') || '{}')
 
     if (users[trimmed] === undefined) {
-      // New user — register
+      //register
       users[trimmed] = password
       localStorage.setItem('vte__users', JSON.stringify(users))
       onLogin(trimmed)
@@ -28,7 +28,7 @@ function LoginScreen({ onLogin }) {
   return (
     <div className="login-screen">
       <div className="login-box">
-        <div className="login-logo">✏️</div>
+        <div className="login-logo">✍</div>
         <h1>Visual Text Editor</h1>
         <p>Enter your name to start editing</p>
         <form onSubmit={handleSubmit}>

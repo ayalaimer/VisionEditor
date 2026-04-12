@@ -11,40 +11,44 @@ import './App.css'
 
 let nextDocId = 1
 
-// Creates a new document object with a unique ID, empty content, and empty undo history.
+// creates a new document 
 function createDoc(name, owner) {
   return { id: nextDocId++, name, owner, chars: [], history: [] }
 }
 
-// Root component that manages all application state and orchestrates child components.
+// root component that manages all application state and orchestrates child components.
 function App() {
-  // Stores the currently logged-in username, or null when no user is active.
+  //current user
   const [currentUser, setCurrentUser] = useState(null)
 
-  // List of all currently open document objects.
+  // list of all currently open document objects.
   const [documents, setDocuments] = useState([])
-  // ID of the document the user is currently working on.
+
+  // id of the document the user is currently working on.
   const [focusedDocId, setFocusedDocId] = useState(null)
 
-  // Current typing style (color, font size, font family) applied to new characters.
+  // current typing style
   const [activeStyle, setActiveStyle] = useState({
     color: '#000000',
     fontSize: '20px',
     fontFamily: 'Arial',
   })
-  // Currently selected keyboard language layout.
+  // currently selected keyboard language layout.
   const [language, setLanguage] = useState('english')
 
-  // Controls which modal overlay is currently visible.
+  // search term to highlight in the active document's screen.
+  const [searchTerm, setSearchTerm] = useState('')
+
+  // controls which window is currently visible.
   const [showSearchReplace, setShowSearchReplace] = useState(false)
   const [showSaveAs, setShowSaveAs] = useState(false)
   const [showOpen, setShowOpen] = useState(false)
   const [closePromptDocId, setClosePromptDocId] = useState(null)
 
-  // Derived reference to the currently focused document object.
+  // derived reference to the currently focused document object.
   const focusedDoc = documents.find(d => d.id === focusedDocId) || null
 
-  // Logs in the user and opens a blank starting document.
+  // logs in the user and opens a blank starting document.
   function handleLogin(username) {
     setCurrentUser(username)
     const doc = createDoc('Untitled', username)
@@ -52,19 +56,19 @@ function App() {
     setFocusedDocId(doc.id)
   }
 
-  // Clears the current session and resets all application state.
+  // clears the current session and resets all application state.
   function handleLogout() {
     setCurrentUser(null)
     setDocuments([])
     setFocusedDocId(null)
   }
 
-  // Applies an updater function to a single document, leaving all others unchanged.
+  // applies an updater function to a single document, leaving all others unchanged.
   function updateDoc(docId, updater) {
     setDocuments(prev => prev.map(d => (d.id === docId ? updater(d) : d)))
   }
 
-  // Pushes the current character array onto the undo history, capped at 50 entries.
+  // pushes the current character array onto the undo history, capped at 50 entries.
   function saveSnapshot(doc) {
     const history = doc.history.length >= 50
       ? [...doc.history.slice(1), doc.chars]
@@ -72,7 +76,7 @@ function App() {
     return history
   }
 
-  // Adds a new character object (with the current style) to the focused document.
+  // adds a new character object (with the current style) to the focused document.
   function addChar(char) {
     if (!focusedDoc) return
     const newChar = { char, ...activeStyle }
@@ -83,7 +87,7 @@ function App() {
     }))
   }
 
-  // Removes the last character from the focused document.
+  // removes the last character from the focused document.
   function deleteChar() {
     if (!focusedDoc || focusedDoc.chars.length === 0) return
     updateDoc(focusedDocId, d => ({
@@ -93,7 +97,7 @@ function App() {
     }))
   }
 
-  // Removes the last word from the document, skipping any trailing spaces or newlines.
+  // removes the last word from the document, skipping any trailing spaces or newlines.
   function deleteWord() {
     if (!focusedDoc) return
     updateDoc(focusedDocId, d => {
@@ -107,13 +111,13 @@ function App() {
     })
   }
 
-  // Clears all characters from the focused document.
+  // clears all characters from the focused document.
   function clearAll() {
     if (!focusedDoc) return
     updateDoc(focusedDocId, d => ({ ...d, history: saveSnapshot(d), chars: [] }))
   }
 
-  // Restores the previous character state from the undo history.
+  // restores the previous character state from the undo history.
   function undo() {
     if (!focusedDoc || focusedDoc.history.length === 0) return
     updateDoc(focusedDocId, d => ({
@@ -123,7 +127,12 @@ function App() {
     }))
   }
 
-  // Finds the first occurrence of a search string and replaces it with another.
+  // highlights all occurrences of the search term in the active document's screen.
+  function handleFind(searchStr) {
+    setSearchTerm(searchStr)
+  }
+
+  // finds the first occurrence of a search string and replaces it with another.
   function searchReplace(searchStr, replaceStr) {
     if (!focusedDoc || !searchStr) return
     const chars = focusedDoc.chars
@@ -140,40 +149,80 @@ function App() {
     }))
   }
 
-  // Persists the document to Local Storage under a user-specific key.
+  // persists the document to Local storage
   function doSave(filename, doc) {
+    const key =`${currentUser}`
+    const exi=JSON.parse(localStorage.getItem(key)||`{}`)
+    exi[filename]=doc
+    localStorage.setItem(key,JSON.stringify(exi))
+
   }
 
-  // Saves the focused document, prompting for a filename if it is still "Untitled".
+  // saves the focused document if it is still Untitled ask filename.
   function saveDoc() {
+    if (!focusedDoc) return;
+    if(focusedDoc?.name=="Untitled"){
+      setShowSaveAs(true);
+    }
+    else {
+      doSave(focusedDoc.name, focusedDoc);
+    }
   }
 
-  // Handles saving the document under a new user-provided filename.
+  // handles saving the document under a new filename.
   function handleSaveAs(filename) {
+    if (!focusedDoc) return
+
+    updateDoc(focusedDocId, d => ({
+      ...d,
+     name: filename,
+    }))
+
+    doSave(filename, {
+    ...focusedDoc,
+     name: filename,
+   })
+
+    setShowSaveAs(false)
   }
 
-  // Loads and returns all saved files belonging to the current user from Local Storage.
-  function getSavedFiles() {
-    return []
-  }
+// loads and returns all saved files belonging to the current user from Local Storage.
+function getSavedFiles() {
+    const exi=JSON.parse(localStorage.getItem(currentUser)||`{}`);
+     return Object.entries(exi).map(([filename, doc]) => ({
+      name: filename,
+      chars: doc.chars
+    }));
+}
 
-  // Opens a saved file by loading its stored content into a new document tab.
+  // opens a saved file by loading its stored content into a new document tab.
   function openFile(filename, chars) {
+      const existing = documents.find(d => d.name === filename)
+      if (existing) {
+        setFocusedDocId(existing.id)
+        setShowOpen(false)
+        return
+      }
+      const doc = createDoc(filename, currentUser);
+      doc.chars = chars;
+      setDocuments(prev=>[...prev,doc])
+      setFocusedDocId(doc.id);
+      setShowOpen(false);
   }
 
-  // Creates and opens a new blank document.
+  // creates and opens a new blank document.
   function newDocument() {
     const doc = createDoc('Untitled', currentUser)
     setDocuments(prev => [...prev, doc])
     setFocusedDocId(doc.id)
   }
 
-  // Triggers the close confirmation prompt for a given document.
+  // triggers the close confirmation prompt for a given document.
   function requestCloseDoc(docId) {
     setClosePromptDocId(docId)
   }
 
-  // Closes a document, optionally saving it to Local Storage first.
+  // closes a document, optionally saving it to Local Storage first.
   function closeDoc(docId, shouldSave) {
     if (shouldSave) {
       const doc = documents.find(d => d.id === docId)
@@ -214,13 +263,13 @@ function App() {
                 isFocused={doc.id === focusedDocId}
                 onClose={e => { e.stopPropagation(); requestCloseDoc(doc.id) }}
               />
-              <Screen chars={doc.chars} />
+              <Screen chars={doc.chars} searchTerm={doc.id === focusedDocId ? searchTerm : ''} />
             </div>
           ))
         )}
       </div>
 
-      {/* Toolbar and virtual keyboard, fixed at the bottom of the screen. */}
+      {/* toolbar and virtual keyboard, fixed at the bottom of the screen. */}
       <div className="bottom-panel">
         <Toolbar
           language={language}
@@ -252,8 +301,9 @@ function App() {
       {/* Overlay modals shown based on current UI state. */}
       {showSearchReplace && (
         <SearchReplaceModal
+          onFind={handleFind}
           onReplace={searchReplace}
-          onClose={() => setShowSearchReplace(false)}
+          onClose={() => { setShowSearchReplace(false); setSearchTerm('') }}
         />
       )}
 

@@ -21,7 +21,7 @@ const COLOR_PRESETS = [
 function Toolbar({
   language, setLanguage,
   activeStyle, setActiveStyle,
-  onDeleteChar, onDeleteWord, onClearAll, onUndo,
+  onDeleteWord, onClearAll, onUndo,
   onSearchReplace,
   onNew, onSave, onSaveAs, onOpen,
   currentUser, onLogout,
@@ -49,9 +49,11 @@ function Toolbar({
       <div className="tb-group">
         <span className="tb-label">Lang</span>
         {[
-          { key: 'english', label: 'EN' },
-          { key: 'hebrew', label: 'עב' },
+          { key: 'english', label: 'english' },
+          { key: 'hebrew', label: 'עברית' },
           { key: 'emojis', label: '😊' },
+          { key:'numbers', label:'1 2 3'},
+          { key:'kaomoji', label:'｡♥‿♥｡'}
         ].map(({ key, label }) => (
           <button
             key={key}
@@ -84,7 +86,7 @@ function Toolbar({
         <select
           className="tb-select tb-select-sm"
           value={activeStyle.fontSize}
-          onChange={() => {}}
+          onChange={e => updateStyle('fontSize', e.target.value)}
         >
           {FONT_SIZES.map(s => (
             <option key={s} value={s}>{s}</option>
@@ -101,24 +103,27 @@ function Toolbar({
               key={c}
               className={`color-dot ${activeStyle.color === c ? 'color-dot-active' : ''}`}
               style={{ background: c, border: c === '#ffffff' ? '1px solid #aaa' : undefined }}
-              onClick={() => {}}
+              onClick={() => updateStyle('color', c)}
               title={c}
             />
           ))}
-          <input
-            type="color"
-            className="color-picker"
-            value={activeStyle.color}
-            onChange={() => {}}
-            title="Custom color"
-          />
+          <label className="color-picker-wrapper">
+            <span
+              className="color-preview"
+              style={{ background: activeStyle.color }}
+            />
+            <input
+              type="color"
+              value={activeStyle.color}
+              onChange={e => updateStyle('color', e.target.value)}
+            />
+          </label>
         </div>
       </div>
 
       {/* Edit actions */}
       <div className="tb-group">
         <span className="tb-label">Edit</span>
-        <button className="tb-btn" onClick={onDeleteChar} disabled={!hasDoc}>⌫</button>
         <button className="tb-btn" onClick={onDeleteWord} disabled={!hasDoc}>Del Word</button>
         <button className="tb-btn" onClick={onClearAll} disabled={!hasDoc}>Clear All</button>
         <button className="tb-btn" onClick={onUndo} disabled={!canUndo}>↩ Undo</button>
@@ -127,7 +132,12 @@ function Toolbar({
 
       {/* User info */}
       <div className="tb-group tb-user">
-        <span>👤 {currentUser}</span>
+        <div className="user-box">
+          <div className="avatar">
+            {currentUser?.[0]?.toUpperCase()}
+          </div>
+          <span>{currentUser}</span>
+        </div>
         <button className="tb-btn" onClick={onLogout}>Logout</button>
       </div>
     </div>

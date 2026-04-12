@@ -1,34 +1,28 @@
-/* ─────────────────────────────────────────
-   Design tokens
-   ───────────────────────────────────────── */
+/* Design tokens */
 :root {
-  --app-bg:       #1a1a2e;
-  --panel-bg:     #16213e;
-  --toolbar-bg:   #0f3460;
-  --keyboard-bg:  #0d2846;
-  --doc-bg:       #ffffff;
-  --doc-border:   #334d6e;
-  --doc-focus:    #00b4d8;
-  --tab-bg:       #1a3a5c;
-  --tab-active:   #0f3460;
-  --tab-focus:    #00b4d8;
-  --btn-bg:       #1e4d78;
-  --btn-hover:    #2563a8;
-  --btn-active:   #00b4d8;
-  --text:         #e2e8f0;
-  --text-dim:     #94a3b8;
-  --accent:       #00b4d8;
+  --app-bg:       #141212;
+  --panel-bg:     #ffffff;
+  --toolbar-bg:   rgba(255,255,255,0.7);
+  --keyboard-bg:  #ffffff50;
+  --tab-bg:       transparent;
+  --tab-active:   #e8e8ed;
+  --btn-bg:       transparent;
+  --btn-hover:    #e8e8ed;
+  --btn-active:   #dcdce1;
+  --text:         #1d1d1f;
+  --text-dim:     #6e6e73;
+  --accent:       #000000;
+  --modal-bg:     #ffffff;
+  --key-bg:       #ffffff;
+  --key-hover:    #f0f0f2;
+  --doc-border:   #e5e5e7;
+  --doc-focus:    #000000;
   --danger:       #ef4444;
-  --modal-bg:     #16213e;
-  --key-bg:       #1e4d78;
-  --key-hover:    #2563a8;
-  --key-border:   rgba(0, 0, 0, 0.45);
-  --radius:       6px;
+  --radius:       10px;
+  --doc-bg: #ffffff;
 }
 
-/* ─────────────────────────────────────────
-   App shell
-   ───────────────────────────────────────── */
+/* App shell*/
 .app {
   display: flex;
   flex-direction: column;
@@ -36,9 +30,7 @@
   background: var(--app-bg);
 }
 
-/* ─────────────────────────────────────────
-   Documents area  (Phase C grid)
-   ───────────────────────────────────────── */
+/* documents area phase c grid*/
 .documents-area {
   flex: 1;
   display: grid;
@@ -59,14 +51,13 @@
   font-size: 16px;
 }
 
-/* ─────────────────────────────────────────
-   Document wrapper
-   ───────────────────────────────────────── */
+/* Document wrapper*/
 .document-wrapper {
   display: flex;
   flex-direction: column;
-  border: 2px solid var(--doc-border);
-  border-radius: var(--radius);
+  border: 1px solid #d1d5db;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
   transition: border-color 0.15s, box-shadow 0.15s;
@@ -75,12 +66,10 @@
 
 .document-wrapper.focused {
   border-color: var(--doc-focus);
-  box-shadow: 0 0 14px rgba(0, 180, 216, 0.35);
+  box-shadow: 0 0 0 2px #d8b8e6;
 }
 
-/* ─────────────────────────────────────────
-   Document tab
-   ───────────────────────────────────────── */
+/*Document tab*/
 .document-tab {
   display: flex;
   align-items: center;
@@ -124,9 +113,7 @@
   color: var(--danger);
 }
 
-/* ─────────────────────────────────────────
-   Screen (character display)
-   ───────────────────────────────────────── */
+/* Screen*/
 .screen {
   flex: 1;
   padding: 12px 14px;
@@ -144,26 +131,23 @@
   font-size: 14px;
 }
 
-/* ─────────────────────────────────────────
-   Bottom panel
-   ───────────────────────────────────────── */
+/* Bottom panel*/
 .bottom-panel {
   flex-shrink: 0;
   background: var(--panel-bg);
   border-top: 2px solid var(--accent);
 }
 
-/* ─────────────────────────────────────────
-   Toolbar
-   ───────────────────────────────────────── */
+/*Toolbar*/
 .toolbar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  padding: 6px 10px;
+  padding: 10px 14px;
   background: var(--toolbar-bg);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid #e5e5e7;
+  backdrop-filter: blur(10px);  
 }
 
 .tb-group {
@@ -171,7 +155,7 @@
   align-items: center;
   gap: 4px;
   padding: 0 8px 0 0;
-  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  border-right: 12px solid rgba(255, 255, 255, 0.12);
 }
 
 .tb-group:last-child {
@@ -190,10 +174,9 @@
 
 .tb-btn {
   background: var(--btn-bg);
-  border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--text);
-  padding: 4px 10px;
-  border-radius: 4px;
+  padding: 6px 10px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 12px;
   white-space: nowrap;
@@ -201,7 +184,8 @@
 }
 
 .tb-btn:hover:not(:disabled) {
-  background: var(--btn-hover);
+  background: #e5e7eb;
+  transform: translateY(-1px);  
 }
 
 .tb-btn:disabled {
@@ -276,15 +260,14 @@
   white-space: nowrap;
 }
 
-/* ─────────────────────────────────────────
-   Keyboard
-   ───────────────────────────────────────── */
+/* Keyboard*/
 .keyboard {
+  border-radius: 6px;
   display: flex;
   flex-direction: column;
   gap: 4px;
   padding: 8px;
-  background: var(--keyboard-bg);
+  background: #f9fafb;
   align-items: center;
 }
 
@@ -302,11 +285,11 @@
 
 .key {
   background: var(--key-bg);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid #e5e5e7;
   border-bottom: 3px solid var(--key-border);
   color: var(--text);
   padding: 5px 9px;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
   min-width: 34px;
@@ -336,25 +319,23 @@
 
 .key-enter {
   min-width: 70px;
-  background: #1a6b3a;
+  background: #73d399;
 }
 
 .key-enter:hover:not(:disabled) {
-  background: #22874a;
+  background: #4eb979;
 }
 
 .key-backspace {
-  background: #7c1a1a;
+  background: #f37878;
   min-width: 55px;
 }
 
 .key-backspace:hover:not(:disabled) {
-  background: #a02424;
+  background: #be4444;
 }
 
-/* ─────────────────────────────────────────
-   Modals
-   ───────────────────────────────────────── */
+/* Modals*/
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -398,10 +379,10 @@
 }
 
 .modal input[type='text'] {
-  background: #0d2846;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: #f5f5f7;
+  border: 1px solid #e5e5e7;
   border-radius: 5px;
-  color: var(--text);
+  color: #1d1d1f;
   padding: 9px 12px;
   font-size: 14px;
   font-family: inherit;
@@ -482,9 +463,9 @@
   align-items: center;
   gap: 10px;
   width: 100%;
-  background: #0d2846;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text);
+  background: #f5f5f7;
+  border: 1px solid #e5e5e7;
+  color: #1d1d1f;
   padding: 10px 14px;
   border-radius: 6px;
   cursor: pointer;
@@ -513,9 +494,7 @@
   white-space: nowrap;
 }
 
-/* ─────────────────────────────────────────
-   Login screen
-   ───────────────────────────────────────── */
+/*login screen*/
 .login-screen {
   height: 100vh;
   display: flex;
@@ -536,8 +515,9 @@
 }
 
 .login-logo {
-  font-size: 52px;
+  font-size: 62px;
   margin-bottom: 12px;
+  color: #000000;
 }
 
 .login-box h1 {
@@ -560,10 +540,10 @@
 }
 
 .login-box input {
-  background: #0d2846;
+  background: #3b3c3d;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 8px;
-  color: var(--text);
+  color: whitesmoke;
   padding: 12px 16px;
   font-size: 16px;
   font-family: inherit;
@@ -596,4 +576,23 @@
 .login-box button:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+.user-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #cfbbfc;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

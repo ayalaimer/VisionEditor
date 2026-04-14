@@ -152,10 +152,9 @@ function App() {
   // persists the document to Local storage
   function doSave(filename, doc) {
     const key =`${currentUser}`
-    const exi=JSON.parse(localStorage.getItem(key)||`{}`)
-    exi[filename]=doc
-    localStorage.setItem(key,JSON.stringify(exi))
-
+    const userFiles=JSON.parse(localStorage.getItem(key)||`{}`)
+    userFiles[filename]=doc
+    localStorage.setItem(key,JSON.stringify(userFiles))
   }
 
   // saves the focused document if it is still Untitled ask filename.

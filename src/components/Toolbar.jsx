@@ -36,16 +36,17 @@ function Toolbar({
   return (
     <div className="toolbar">
 
-      {/* File operations */}
+      {/* File operations: create, save, save-as, and open documents. */}
       <div className="tb-group">
         <span className="tb-label">File</span>
         <button className="tb-btn" onClick={onNew}>+ New</button>
+        {/* Save and Save As are disabled when no document is open. */}
         <button className="tb-btn" onClick={onSave} disabled={!hasDoc}>Save</button>
         <button className="tb-btn" onClick={onSaveAs} disabled={!hasDoc}>Save As</button>
         <button className="tb-btn" onClick={onOpen}>Open</button>
       </div>
 
-      {/* Language toggle */}
+      {/* Language toggle: switches the virtual keyboard layout. Active layout is highlighted. */}
       <div className="tb-group">
         <span className="tb-label">Lang</span>
         {[
@@ -65,7 +66,7 @@ function Toolbar({
         ))}
       </div>
 
-      {/* Font family */}
+      {/* Font family selector: previews each font in its own typeface. */}
       <div className="tb-group">
         <span className="tb-label">Font</span>
         <select
@@ -80,7 +81,7 @@ function Toolbar({
         </select>
       </div>
 
-      {/* Font size */}
+      {/* Font size selector. */}
       <div className="tb-group">
         <span className="tb-label">Size</span>
         <select
@@ -94,11 +95,12 @@ function Toolbar({
         </select>
       </div>
 
-      {/* Color presets + custom picker */}
+      {/* Color presets row plus a native color picker for custom colors. */}
       <div className="tb-group">
         <span className="tb-label">Color</span>
         <div className="color-row">
           {COLOR_PRESETS.map(c => (
+            // White preset gets a visible border so it's distinguishable from the background.
             <button
               key={c}
               className={`color-dot ${activeStyle.color === c ? 'color-dot-active' : ''}`}
@@ -107,6 +109,7 @@ function Toolbar({
               title={c}
             />
           ))}
+          {/* Hidden native color input triggered by clicking the preview swatch. */}
           <label className="color-picker-wrapper">
             <span
               className="color-preview"
@@ -121,18 +124,20 @@ function Toolbar({
         </div>
       </div>
 
-      {/* Edit actions */}
+      {/* Edit actions: destructive operations and search-replace. Disabled when no doc is open. */}
       <div className="tb-group">
         <span className="tb-label">Edit</span>
         <button className="tb-btn" onClick={onDeleteWord} disabled={!hasDoc}>Del Word</button>
         <button className="tb-btn" onClick={onClearAll} disabled={!hasDoc}>Clear All</button>
+        {/* Undo is additionally disabled when there is no history to revert to. */}
         <button className="tb-btn" onClick={onUndo} disabled={!canUndo}>↩ Undo</button>
-        <button className="tb-btn" onClick={onSearchReplace} disabled={!hasDoc}>🔍 Replace</button>
+        <button className="tb-btn" onClick={onSearchReplace} disabled={!hasDoc}>🔍Search or Replace</button>
       </div>
 
-      {/* User info */}
+      {/* User info section: avatar, username, and logout — pushed to the far right via margin-left: auto. */}
       <div className="tb-group tb-user">
         <div className="user-box">
+          {/* Avatar shows the first letter of the username as a coloured circle. */}
           <div className="avatar">
             {currentUser?.[0]?.toUpperCase()}
           </div>
